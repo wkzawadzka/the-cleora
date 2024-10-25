@@ -1,0 +1,3 @@
+[submodule "cleora"]
+	path = cleora
+	url = https://github.com/BaseModelAI/cleora
