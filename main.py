@@ -1,7 +1,7 @@
 from src.data_loader import load_data
 from src.pipeline import create_pipeline
-from src.knn import KNeighborsClassifier
-from src.tree import DecisionTreeClassifier
+#from src.models.knn import KNeighborsClassifier
+from src.models.tree import DecisionTreeClassifier
 from src.Preprocessing import Preprocessing
 
 def main():
@@ -9,7 +9,13 @@ def main():
     preprocessing_singleton.make_preprocessed_edges_file()
     
     X_train, X_test, y_train, y_test = load_data()
-    
+
+    pipeline = create_pipeline()
+    pipeline.fit(X_train, y_train)
+        
+    accuracy = pipeline.score(X_test, y_test)
+    print(f"{'knn'} Accuracy: {accuracy:.4f}")
+    """
     models = {
         "KNeighbors": KNeighborsClassifier(),
         "DecisionTree": DecisionTreeClassifier()
@@ -22,6 +28,6 @@ def main():
         
         accuracy = pipeline.score(X_test, y_test)
         print(f"{model_name} Accuracy: {accuracy:.4f}")
-
+    """
 if __name__ == '__main__':
     main()
