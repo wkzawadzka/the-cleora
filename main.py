@@ -1,10 +1,13 @@
-from data_loader import load_data
-from pipeline import create_pipeline
-from knn import KNeighborsClassifier
-from tree import DecisionTreeClassifier
+from src.data_loader import load_data
+from src.pipeline import create_pipeline
+from src.knn import KNeighborsClassifier
+from src.tree import DecisionTreeClassifier
+from src.Preprocessing import Preprocessing
 
 def main():
-
+    preprocessing_singleton = Preprocessing()
+    preprocessing_singleton.make_preprocessed_edges_file()
+    
     X_train, X_test, y_train, y_test = load_data()
     
     models = {
