@@ -3,11 +3,13 @@ Semantic Web and Social Networks Final Project at @PUT Poznan:
 KG Embeddings: exploring **Cleora**: A Simple, Strong and Scalable Graph Embedding Scheme.
 
 ### Case study
-we take on the role of a recruiter aiming to identify top talent for machine learning engineer positions. Our goal is to focus on active and engaged users, specifically those with at least 10 starred repositories, as these individuals will likely be better candidates. Since the dataset we are using, GitHub Social Network [1], was created in June 2019, these developers likely now have even more experience and expertise. <br></br>
+We take on the role of a recruiter aiming to identify top talent for machine learning engineer positions. Our goal is to focus on active and engaged users, specifically those with at least 10 starred repositories, as these individuals will likely be better candidates. Since the dataset we are using, GitHub Social Network [1], was created in June 2019, these developers likely now have even more experience and expertise. <br></br>
 For node embeddings, we will use Cleora [2]embeddings, which capture structural information by embedding relationships among nodes.
 
 
+### About the dataset
 
+A large social network of GitHub developers which was collected from the public API in June 2019. Nodes are developers who have starred at least 10 repositories and edges are mutual follower relationships between them. The vertex features are extracted based on the location, repositories starred, employer and e-mail address. The task related to the graph is binary node classification - one has to predict whether the GitHub user is a web or a machine learning developer. This target feature was derived from the job title of each user.
 
 
 
