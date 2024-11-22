@@ -1,23 +1,24 @@
 import os
 import subprocess
 import pandas as pd
+from pathlib import Path 
 
-from src.Config import config
+from src.config import config
 
 class CleoraFacade:
     def __init__(self, dimension=128, cleora_binary_filemane="cleora-v1.2.3-x86_64-pc-windows-msvc", iterations=1):
         cleora_dir = "cleora_binaries"
-        self.cleora_binary_path = os.path.join(cleora_dir, cleora_binary_filemane)
+        self.cleora_binary_path = Path.cwd() / "data" / cleora_dir / cleora_binary_filemane
         self.dimension = dimension
         self.iterations = iterations
 
     def run_cleora(self, input_file):
-        output_dir = 'embeddings'
+        output_dir = Path.cwd() / "data" / "embeddings"
         os.makedirs(output_dir, exist_ok=True)
         cleora_command = [
             self.cleora_binary_path,
             '-c', 'transient::cluster_id node',
-            '--input', input_file,
+            '--input', Path.cwd() / input_file,
             '-o', output_dir,
             #'--seed', config['random_seed'],
             '--dimension', str(self.dimension),
