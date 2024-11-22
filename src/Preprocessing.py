@@ -34,7 +34,8 @@ class Preprocessing():
         if not os.path.exists(os.path.join(extract_dir,
             "git_web_ml/musae_git_edges.csv")) or not os.path.exists(os.path.join(extract_dir,
             "git_web_ml/musae_git_target.csv")) or not os.path.exists(os.path.join(extract_dir,
-            "git_web_ml/musae_git_features.json")):
+            "git_web_ml/musae_git_features.json")) or not os.path.exists(os.path.join(binaries_dir,
+            binaries_url.split("/")[-1])):
 
             os.makedirs(binaries_dir, exist_ok=True)
 
@@ -45,7 +46,7 @@ class Preprocessing():
 
             response = requests.get(binaries_url, stream=True)
             response.raise_for_status()
-            output_file = binaries_dir / "cleora-v1.2.3-x86_64-pc-windows-msvc"
+            output_file = binaries_dir / binaries_url.split("/")[-1]
             with open(output_file, 'wb') as file:
                 for chunk in response.iter_content(chunk_size=8192):
                     file.write(chunk)
@@ -67,20 +68,3 @@ class Preprocessing():
                     file.write("{}\t{}\n".format(n, id_1))
                     for elem in group_elems:
                         file.write("{}\t{}\n".format(n, elem))
-
-                        """
-    def make_preprocessed_edges_file(self):
-        edges_df = pd.read_csv("data/git_web_ml/musae_git_edges.csv")
-
-        # Create reversed edges - cleora by default treats the graph as directed
-        #reversed_edges_df = edges_df.rename(columns={"id_1": "id_2", "id_2": "id_1"})
-        #edges_df = pd.concat([edges_df, reversed_edges_df]).drop_duplicates().reset_index(drop=True)
-
-        with open("data/preprocessed_edges.txt", "w") as file:
-            grouped_edges = edges_df.groupby('id_1')
-            for _, (id_1, group) in enumerate(grouped_edges):
-                group_list = group['id_2'].tolist()
-                group_elems = list(map(str, group_list))
-                for id_2 in group_elems:
-                    file.write(f"{id_1}\t{id_2}\n")
-"""
