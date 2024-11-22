@@ -1,9 +1,10 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from src.Config import config
+from src.config import config
 import os
 import requests
 from zipfile import ZipFile
+from pathlib import Path
 
 class Preprocessing():
     __instance = None
@@ -24,8 +25,10 @@ class Preprocessing():
 
     def download_data(self):
         url = config['data_url']
+        binaries_url = config['binaries_url']
         zip_path = "data/git_web_ml.zip"
         extract_dir = "data"
+        binaries_dir = Path.cwd() / extract_dir / "cleora_binaries"
 
         # Check if the data is already downloaded
         if not os.path.exists(os.path.join(extract_dir,
@@ -33,12 +36,19 @@ class Preprocessing():
             "git_web_ml/musae_git_target.csv")) or not os.path.exists(os.path.join(extract_dir,
             "git_web_ml/musae_git_features.json")):
 
-            os.makedirs(extract_dir, exist_ok=True)
+            os.makedirs(binaries_dir, exist_ok=True)
 
             print("Downloading data...")
             response = requests.get(url)
             with open(zip_path, "wb") as file:
                 file.write(response.content)
+
+            response = requests.get(binaries_url, stream=True)
+            response.raise_for_status()
+            output_file = binaries_dir / "cleora-v1.2.3-x86_64-pc-windows-msvc"
+            with open(output_file, 'wb') as file:
+                for chunk in response.iter_content(chunk_size=8192):
+                    file.write(chunk)
 
             print("Extracting data...")
             with ZipFile(zip_path, "r") as zip_ref:
