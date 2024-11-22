@@ -1,9 +1,9 @@
 from src.data_loader import load_data
 from src.pipeline import create_pipeline
-from src.knn import KNeighborsClassifier
-from src.tree import DecisionTreeClassifier
 from src.Preprocessing import Preprocessing
-
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import classification_report
 def main():
     preprocessing_singleton = Preprocessing()
     preprocessing_singleton.make_preprocessed_edges_file()
@@ -11,17 +11,21 @@ def main():
     X_train, X_test, y_train, y_test = load_data()
     
     models = {
-        "KNeighbors": KNeighborsClassifier(),
-        "DecisionTree": DecisionTreeClassifier()
+        "KNeighbors": KNeighborsClassifier(n_neighbors=7), 
+        "DecisionTree": DecisionTreeClassifier() 
     }
     
     for model_name, model in models.items():
-        print(f"\nTraining pipeline with {model_name}...")
-        pipeline = create_pipeline(model)
-        pipeline.fit(X_train, y_train)
+            print(f"\nTraining pipeline with {model_name}...")
+            pipeline = create_pipeline(model)
+            
+            pipeline.fit(X_train, y_train)
+            y_pred = pipeline.predict(X_test)
+            
+            # evaluate model performance
+            print(f"\n{model_name} Model Evaluation:")
+            print(f"Accuracy: {pipeline.score(X_test, y_test):.4f}")
+            print(classification_report(y_test, y_pred))
         
-        accuracy = pipeline.score(X_test, y_test)
-        print(f"{model_name} Accuracy: {accuracy:.4f}")
-
 if __name__ == '__main__':
     main()
