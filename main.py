@@ -1,12 +1,17 @@
 from src.data_loader import load_data
 from src.pipeline import create_pipeline
 from src.Preprocessing import Preprocessing
+from src.CleoraFacade import CleoraFacade
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report
+from pathlib import Path
+
 def main():
     preprocessing_singleton = Preprocessing()
     preprocessing_singleton.make_preprocessed_edges_file()
+    cleora = CleoraFacade()
+    cleora.run_cleora(Path.cwd() / "data" / "preprocessed_edges.txt")
     
     X_train, X_test, y_train, y_test = load_data()
     

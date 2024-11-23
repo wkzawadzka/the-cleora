@@ -9,7 +9,6 @@ def load_data():
     test = preprocess.test
 
     cleora = CleoraFacade()
-    cleora.run_cleora(Path.cwd() / "data" / "preprocessed_edges.txt")
     embeddings_path = Path.cwd() / "data" / "embeddings" / "emb__cluster_id__node.out"
     embeddings, dimension = cleora.load_embeddings(embeddings_path)
 
