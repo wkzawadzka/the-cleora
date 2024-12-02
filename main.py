@@ -1,7 +1,7 @@
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import SGDClassifier, LogisticRegression
 from pathlib import Path
 from src.utils.data import download_data, make_preprocessed_edges_file, split_data, load_data
 from src.utils.plots import visualize_pipeline, save_cm
@@ -28,13 +28,14 @@ def main():
     # prepare models
     models = {
         "KNeighbors": KNeighborsClassifier(n_neighbors=7), 
-        "DecisionTree": DecisionTreeClassifier(class_weight="balanced"),
-        "SGDClassifier": SGDClassifier(random_state=config['random_state'], loss='log_loss', alpha=0.0001)
+        "DecisionTree": DecisionTreeClassifier(random_state=config['random_state'], class_weight="balanced"),
+        "SGDClassifier1": SGDClassifier(random_state=config['random_state'], loss='log_loss', alpha=0.0001, penalty='elasticnet'),
+        "LogisticRegression": LogisticRegression(random_state=config['random_state'], class_weight="balanced")
     }
     
     for model_name, model in models.items():
         print(f"\nTraining pipeline with {model_name}...")
-        pipeline = model_pipeline(model)
+        pipeline = model_pipeline(model, imblearn=True)
         
         pipeline.fit(X_train, y_train)
         y_pred = pipeline.predict(X_test)
