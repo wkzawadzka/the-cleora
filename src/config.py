@@ -4,5 +4,4 @@ config = {
     'random_state': 2137,
     'train_test_split': 0.2,
     'random_seed': 2137
-
 }

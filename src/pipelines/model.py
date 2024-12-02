@@ -1,9 +1,12 @@
 from sklearn.pipeline import Pipeline
 from sklearn.neighbors import KNeighborsClassifier
 #from sklearn.tree import DecisionTreeClassifier
-from src.models.CosineSimilarityTransformer import CosineSimilarityTransformer 
+from src.models.transformers import CosineSimilarityTransformer 
+from sklearn.utils import estimator_html_repr
+import matplotlib.pyplot as plt
+from pathlib import Path
 
-def create_pipeline(model, verbose=True):
+def model_pipeline(model, verbose=True):
     """
     This function creates a pipeline based on the model passed in.
     We are adding a custom transformer (e.g., CosineSimilarityTransformer) for Knn, 
@@ -26,4 +29,10 @@ def create_pipeline(model, verbose=True):
             ('classifier', model)  
         ], verbose=verbose)
     
+    diagram_path = Path.cwd() / "diagrams" / f"pipeline_{type(model).__name__}.html"
+    diagram_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(diagram_path, "w", encoding="utf-8") as f:
+        f.write(estimator_html_repr(pipeline))
+
     return pipeline
