@@ -6,6 +6,7 @@ from pathlib import Path
 import networkx as nx
 import matplotlib.pyplot as plt
 from sklearn.utils import estimator_html_repr
+from sklearn.metrics import ConfusionMatrixDisplay
 
 def plot_class_distribution(target_df, output_dir='data/plots', filename='class_distribution.png'):
     """
@@ -53,6 +54,8 @@ def plot_class_distribution(target_df, output_dir='data/plots', filename='class_
 
 
 def visualize_pipeline(pipeline, output_path=Path("diagrams") / "data_pipeline.png", type='graph'):
+    diagrams_dir = Path.cwd() / "diagrams"
+    diagrams_dir.mkdir(exist_ok=True)  # ensure 'diagrams' directory exists
     # as G ***************************
     if type == 'graph':
         G = nx.DiGraph()
@@ -88,3 +91,24 @@ def visualize_pipeline(pipeline, output_path=Path("diagrams") / "data_pipeline.p
             f.write(pipeline.to_html2())
         print(f"Pipeline diagram saved to {diagram_path}")
 
+def save_cm(confusion_matrix, model, classes=["Web Devs", "ML Engs"]):
+    """ Save a confusion matrix plot for a given model.
+
+    Parameters:
+        confusion_matrix (array-like): The confusion matrix to display.
+        model (object): The model object (used to name the file).
+        classes (list): List of class labels for the confusion matrix. """
+    plt.title(f"Confusion Matrix - {type(model).__name__}")
+    plt.tight_layout()
+
+    diagrams_dir = Path.cwd() / "diagrams"
+    diagrams_dir.mkdir(exist_ok=True)  # ensure 'diagrams' directory exists
+    diagram_path = diagrams_dir / f"cm_{type(model).__name__}.png"
+
+    disp = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix,
+                                  display_labels=classes)
+    disp.plot()
+    plt.savefig(diagram_path)
+    plt.close() 
+
+    print(f"Confusion matrix saved at: {diagram_path}")

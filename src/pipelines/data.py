@@ -1,12 +1,12 @@
 import html
 class DataPipeline():
     def __init__(self, steps):
-        self.steps = steps  # List of (name, step) tuples, where each step is a callable
+        self.steps = steps  
 
     def run(self, data=None):
         for name, step in self.steps:
-            print(f"Running step: {name}")
-            data = step(data)  # Execute the step and update the data
+            print(f"[Data pipeline] Running step: {name}")
+            data = step(data) 
         return data
     
     def to_html(self):

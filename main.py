@@ -1,9 +1,9 @@
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 from pathlib import Path
 from src.utils.data import download_data, make_preprocessed_edges_file, split_data, load_data
-from src.utils.plots import visualize_pipeline
+from src.utils.plots import visualize_pipeline, save_cm
 from src.pipelines.data import DataPipeline
 from src.pipelines.model import model_pipeline
 from src.cleora import CleoraFacade
@@ -40,6 +40,10 @@ def main():
         print(f"\n{model_name} Model Evaluation:")
         print(f"Accuracy: {pipeline.score(X_test, y_test):.4f}")
         print(classification_report(y_test, y_pred))
+        print("******************************\n")
+        cm = confusion_matrix(y_test, y_pred)
+        print(cm)
+        save_cm(cm, model)
         
 if __name__ == '__main__':
     main()
