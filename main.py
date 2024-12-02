@@ -1,12 +1,14 @@
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.linear_model import SGDClassifier
 from pathlib import Path
 from src.utils.data import download_data, make_preprocessed_edges_file, split_data, load_data
 from src.utils.plots import visualize_pipeline, save_cm
 from src.pipelines.data import DataPipeline
 from src.pipelines.model import model_pipeline
 from src.cleora import CleoraFacade
+from src.config import config
 
 def main():
     # prepare data
@@ -26,7 +28,8 @@ def main():
     # prepare models
     models = {
         "KNeighbors": KNeighborsClassifier(n_neighbors=7), 
-        "DecisionTree": DecisionTreeClassifier() 
+        "DecisionTree": DecisionTreeClassifier(class_weight="balanced"),
+        "SGDClassifier": SGDClassifier(random_state=config['random_state'], loss='log_loss', alpha=0.0001)
     }
     
     for model_name, model in models.items():
