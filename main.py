@@ -2,28 +2,30 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.linear_model import SGDClassifier, LogisticRegression
-from pathlib import Path
-from src.utils.data import download_data, make_preprocessed_edges_file, split_data, load_data
+from src.utils.data import download_data, make_preprocessed_edges_file, split_data, load_data, run_cleora
 from src.utils.plots import visualize_pipeline, save_cm
 from src.pipelines.data import DataPipeline
 from src.pipelines.model import model_pipeline
-from src.cleora import CleoraFacade
 from src.config import config
 
 def main():
-    # prepare data
-    data_pipeline = DataPipeline([
+
+    # prepare embeddings
+    embedings_pipeline = DataPipeline([
         ("Download data", download_data),
         ("Preprocess edges", make_preprocessed_edges_file),
+        ("Run Cleora", run_cleora)
+    ])
+    embedings_pipeline.run()
+
+    # prepare data for ML
+    data_pipeline = DataPipeline([
+        ("Download data", download_data),
         ("Split data", split_data),
         ("Load Data", load_data)
     ])
     X_train, X_test, y_train, y_test = data_pipeline.run()
     visualize_pipeline(data_pipeline, type='html2')
-
-
-    cleora = CleoraFacade()
-    cleora.run_cleora(Path.cwd() / "data" / "preprocessed_edges.txt")
     
     # prepare models
     models = {

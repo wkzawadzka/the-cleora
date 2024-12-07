@@ -9,13 +9,23 @@ from src.cleora import CleoraFacade
 def make_preprocessed_edges_file(data=None):
     edges_df = pd.read_csv("data/git_web_ml/musae_git_edges.csv")
 
-    with open("data/preprocessed_edges.txt", "w") as file:
+    with open("data/clique_edges.txt", "w") as cleora_clique, open("data/star_edges.txt", "w") as cleora_star:
         grouped_edges = edges_df.groupby('id_1')
-        for n, (id_1, group) in enumerate(grouped_edges):
-            group_elems = group['id_2'].tolist()
-            file.write("{}\t{}\n".format(n, id_1))
+        #for n, (name, group) in enumerate(grouped_train):
+        for n, (name, group) in enumerate(grouped_edges):
+            group_list = group['id_2'].tolist()
+            group_elems = list(map(str, group_list))
+            cleora_clique.write("{} {}\n".format(name, ' '.join(group_elems)))
+            cleora_star.write("{}\t{}\n".format(n, name))
             for elem in group_elems:
-                file.write("{}\t{}\n".format(n, elem))
+                cleora_star.write("{}\t{}\n".format(n, elem))
+
+def run_cleora(data=None):
+    cleora = CleoraFacade(
+        dimension=config['embedings_dimensions'],
+        iterations=config['cleora_iterations']
+    )
+    cleora.run_cleora(config['cleora_expanison_type'])
 
 def download_data(data=None):
     url = config['data_url']
@@ -68,9 +78,14 @@ def split_data(data=None):
 
 def load_data(data=None):
     train, test = data
-
     cleora = CleoraFacade()
-    embeddings_path = Path.cwd() / "data" / "embeddings" / "emb__cluster_id__node.out"
+    if config['cleora_expanison_type'] == 'star':
+        embeddings_path = Path.cwd() / "data" / "embeddings" / config['star_embedings_filename']
+    elif config['cleora_expanison_type'] == 'clique':
+        embeddings_path = Path.cwd() / "data" / "embeddings" / config['clique_embedings_filename']
+    else:
+        raise ValueError("Invalid expansion type. Choose either 'star' or 'clique'.")
+    
     embeddings, dimension = cleora.load_embeddings(embeddings_path)
 
     train = integrate_embeddings(train, embeddings)
