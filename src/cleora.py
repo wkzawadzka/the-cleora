@@ -26,7 +26,6 @@ class CleoraFacade:
                 '-c', 'transient::cluster_id node',
                 '--input', Path.cwd() / input_file,
                 '-o', output_dir,
-                #'--seed', config['random_seed'],
                 '--dimension', str(self.dimension),
                 '-n', str(self.iterations)
             ]
@@ -37,7 +36,6 @@ class CleoraFacade:
                 '-c', 'complex::reflexive::node',
                 '--input', Path.cwd() / input_file,
                 '-o', output_dir,
-                #'--seed', config['random_seed'],
                 '--dimension', str(self.dimension),
                 '-n', str(self.iterations)
             ]
