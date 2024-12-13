@@ -5,7 +5,10 @@ numpy==2.2.0
 pandas==2.2.3
 plotnine==0.14.2
 Requests==2.32.3
+rich==13.9.4
 scikit_learn==1.6.0
+seaborn==0.13.2
 tabulate==0.9.0
 tensorflow==2.18.0
 tqdm==4.67.1
+typer==0.15.1
