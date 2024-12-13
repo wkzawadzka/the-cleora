@@ -16,5 +16,5 @@ cleora/*
 diagrams/*
 experiment result/*
 *.csv
-*.png
+!summary_results.csv
 *.html
