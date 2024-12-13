@@ -94,6 +94,8 @@ def load_data(data=None):
     
     X_train = pd.DataFrame(train['embedding'].tolist(), index=train.index)
     X_test = pd.DataFrame(test['embedding'].tolist(), index=test.index)
+    X_train.columns = X_train.columns.astype(str)
+    X_test.columns = X_test.columns.astype(str)
     
     y_train = train['ml_target']
     y_test = test['ml_target']
