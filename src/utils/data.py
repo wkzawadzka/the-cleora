@@ -26,6 +26,7 @@ def run_cleora(data=None):
         iterations=config['cleora_iterations']
     )
     cleora.run_cleora(config['cleora_expanison_type'])
+    return cleora
 
 def download_data(data=None):
     url = config['data_url']
@@ -91,8 +92,8 @@ def load_data(data=None):
     train = integrate_embeddings(train, embeddings)
     test = integrate_embeddings(test, embeddings)
     
-    X_train = pd.DataFrame(train['embedding'].tolist())
-    X_test = pd.DataFrame(test['embedding'].tolist())
+    X_train = pd.DataFrame(train['embedding'].tolist(), index=train.index)
+    X_test = pd.DataFrame(test['embedding'].tolist(), index=test.index)
     
     y_train = train['ml_target']
     y_test = test['ml_target']
@@ -100,4 +101,7 @@ def load_data(data=None):
     return X_train, X_test, y_train, y_test
 
 def integrate_embeddings(df, embeddings):
-    return df.merge(embeddings, left_on='id', right_on='node', how='left').drop(columns=['node'])
+    merged_df = df.merge(embeddings, left_on='id', right_on='node', how='left')
+    # set 'id' as the index
+    merged_df = merged_df.set_index('node')
+    return merged_df.drop(columns=['node'], errors='ignore')
