@@ -10,7 +10,7 @@ from imblearn.under_sampling import RandomUnderSampler
 from imblearn.pipeline import Pipeline as Pipeline2
 from src.config import config
 
-def model_pipeline(model, verbose=True, imblearn=False):
+def model_pipeline(model, verbose=True):
     """
     This function creates a pipeline based on the model passed in.
     We are adding a custom transformer (e.g., CosineSimilarityTransformer) for Knn, 
@@ -22,16 +22,26 @@ def model_pipeline(model, verbose=True, imblearn=False):
     Returns:
         Pipeline: A sklearn pipeline with optional custom transformers and classifiers.
     """
+    imblearn = config['imblearn']
+    over = SMOTE(sampling_strategy = config['over_sampling_strategy'], random_state=config['random_state'])
+    under = RandomUnderSampler(sampling_strategy = config['under_sampling_strategy'], random_state=config['random_state'])
+    
 
     if isinstance(model, KNeighborsClassifier):
-        pipeline = Pipeline([
-            ('cosine_similarity', CosineSimilarityTransformer()),  
-            ('knn', model)  # KNN classifier
-        ], verbose=verbose)
+        if imblearn:
+            pipeline = Pipeline([
+                ('cosine_similarity', CosineSimilarityTransformer()),  
+                #('oversampling', over),
+                #('undersampling', under),
+                ('knn', model)  # KNN classifier
+            ], verbose=verbose)
+        else:
+            pipeline = Pipeline([
+                ('cosine_similarity', CosineSimilarityTransformer()),  
+                ('knn', model)  # KNN classifier
+            ], verbose=verbose)
     else: # default
         if imblearn:
-            over = SMOTE(sampling_strategy = 0.55, random_state=config['random_state'])
-            under = RandomUnderSampler(sampling_strategy = 0.7, random_state=config['random_state'])
             pipeline = Pipeline2([
                 ('oversampling', over),
                 ('undersampling', under),
@@ -43,7 +53,7 @@ def model_pipeline(model, verbose=True, imblearn=False):
             ], verbose=verbose)
     
 
-    diagram_path = Path.cwd() / "diagrams" / f"pipeline_{type(model).__name__}.html"
+    diagram_path = Path("experiment results") / config['experiment_name'] / "diagrams" / f"pipeline_{type(model).__name__}.html"
     diagram_path.parent.mkdir(parents=True, exist_ok=True)
     with open(diagram_path, "w", encoding="utf-8") as f:
         f.write(estimator_html_repr(pipeline))

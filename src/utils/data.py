@@ -107,3 +107,14 @@ def integrate_embeddings(df, embeddings):
     # set 'id' as the index
     merged_df = merged_df.set_index('node')
     return merged_df.drop(columns=['node'], errors='ignore')
+
+def save_report(df: pd.DataFrame, model_name: str):
+    """
+    Save a report DataFrame to the reports folder with the specified experiment name and model name.
+    """
+    report_dir = Path("experiment results") / config['experiment_name']
+    report_dir.mkdir(parents=True, exist_ok=True)
+    
+    file_path = report_dir / f"{model_name}.csv"
+    out = df.to_csv(file_path, index=False)
+    print(f"Report saved to: {file_path}")

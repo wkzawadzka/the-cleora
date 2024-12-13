@@ -9,6 +9,16 @@ config = {
 
     # used in cleora.py and utils.data.py
     'embedings_dimensions': 128,
+
+    # imblearn params
+    'over_sampling_strategy': 0.55, #SMOTE
+    'under_sampling_strategy': 0.7, 
+
+    # experiments
+    'experiment_name': 'test',
     'cleora_iterations': 3,
-    'cleora_expanison_type': 'star'
+    'cleora_expanison_type': 'star',
+    'cleora_features_bool': False,
+    'imblearn': True,
+    'knn_neighbors': 7
 }

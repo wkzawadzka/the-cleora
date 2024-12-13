@@ -7,6 +7,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from sklearn.utils import estimator_html_repr
 from sklearn.metrics import ConfusionMatrixDisplay
+from src.config import config
 
 def plot_class_distribution(target_df, output_dir='data/plots', filename='class_distribution.png'):
     """
@@ -53,9 +54,9 @@ def plot_class_distribution(target_df, output_dir='data/plots', filename='class_
     return(plot)
 
 
-def visualize_pipeline(pipeline, output_path=Path("diagrams") / "data_pipeline.png", type='graph'):
-    diagrams_dir = Path.cwd() / "diagrams"
-    diagrams_dir.mkdir(exist_ok=True)  # ensure 'diagrams' directory exists
+def visualize_pipeline(pipeline, output_path = Path("experiment results") / config['experiment_name'] / "diagrams" / "data_pipeline.png", type='graph'):
+    diagrams_dir = Path("experiment results") / config['experiment_name'] / "diagrams"
+    diagrams_dir.mkdir(parents=True, exist_ok=True)  # ensure 'diagrams' directory exists
     # as G ***************************
     if type == 'graph':
         G = nx.DiGraph()
@@ -67,6 +68,7 @@ def visualize_pipeline(pipeline, output_path=Path("diagrams") / "data_pipeline.p
             G.add_node(next_step_name)  
             G.add_edge(step_name, next_step_name) 
         plt.figure(figsize=(10, 8)) 
+        plt.title(config['experiment_name'])
         pos = nx.spring_layout(G, seed=42)  
         nx.draw(G, pos, with_labels=True, node_size=3000, node_color="skyblue", font_size=10, font_weight="bold", arrows=True)
 
@@ -77,7 +79,7 @@ def visualize_pipeline(pipeline, output_path=Path("diagrams") / "data_pipeline.p
 
     elif type == 'html':
     # html ******************************
-        diagram_path = Path.cwd() / "diagrams" / f"data_pipeline.html"
+        diagram_path = diagrams_dir / f"data_pipeline.html"
         diagram_path.parent.mkdir(parents=True, exist_ok=True)
         with open(diagram_path, "w", encoding="utf-8") as f:
             f.write(pipeline.to_html())
@@ -85,7 +87,7 @@ def visualize_pipeline(pipeline, output_path=Path("diagrams") / "data_pipeline.p
     
     elif type == 'html2':
         # html ******************************
-        diagram_path = Path.cwd() / "diagrams" / f"data_pipeline.html"
+        diagram_path = diagrams_dir / f"data_pipeline.html"
         diagram_path.parent.mkdir(parents=True, exist_ok=True)
         with open(diagram_path, "w", encoding="utf-8") as f:
             f.write(pipeline.to_html2())
@@ -100,8 +102,9 @@ def save_cm(confusion_matrix, model, classes=["Web Devs", "ML Engs"]):
         classes (list): List of class labels for the confusion matrix. """
     plt.title(f"Confusion Matrix - {type(model).__name__}")
     plt.tight_layout()
+    plt.title(config['experiment_name'])
 
-    diagrams_dir = Path.cwd() / "diagrams"
+    diagrams_dir = Path("experiment results") / config['experiment_name'] / "diagrams"
     diagrams_dir.mkdir(exist_ok=True)  # ensure 'diagrams' directory exists
     diagram_path = diagrams_dir / f"cm_{type(model).__name__}.png"
 
