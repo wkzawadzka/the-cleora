@@ -15,10 +15,10 @@ config = {
     'under_sampling_strategy': 0.7, 
 
     # experiments
-    'experiment_name': 'it8_star_wofeat_imblearn_6',
+    'experiment_name': 'it8_star_feat_woimblearn_6',
     'cleora_iterations': 8,
     'cleora_expanison_type': 'star',
-    'cleora_features_bool': False,
-    'imblearn': True,
+    'cleora_features_bool': True,
+    'imblearn': False,
     'knn_neighbors': 6
 }

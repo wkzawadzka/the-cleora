@@ -5,6 +5,8 @@ from src.config import config
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from src.cleora import CleoraFacade
+import json
+from sklearn.preprocessing import StandardScaler
 
 def make_preprocessed_edges_file(data=None):
     edges_df = pd.read_csv("data/git_web_ml/musae_git_edges.csv")
@@ -118,3 +120,26 @@ def save_report(df: pd.DataFrame, model_name: str):
     file_path = report_dir / f"{model_name}.csv"
     out = df.to_csv(file_path, index=False)
     print(f"Report saved to: {file_path}")
+
+def add_on_features(data=None, num=10):
+    X_train, X_test, y_train, y_test = data
+    with open("data/git_web_ml/musae_git_features.json") as json_file:
+        features = json.load(json_file)  # node features
+
+    # convert the JSON data to a DataFrame
+    df = pd.DataFrame.from_dict(features, orient="index").reset_index()
+    df = df.fillna(0)
+    df = df.map(int)
+    df.columns = ['node'] + [f'feature_{i}' for i in range(len(df.columns) - 1)]
+    df = df.drop(columns=['node']) # same as index
+
+    # print(df.head())  # preview the DataFrame
+    #print(df.shape)
+
+    X_train = X_train.merge(df.iloc[:,0:num], left_index=True, right_index=True)
+    X_test = X_test.merge(df.iloc[:,0:num], left_index=True, right_index=True)
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.fit_transform(X_test)
+
+    return(X_train_scaled, X_test_scaled, y_train, y_test)
