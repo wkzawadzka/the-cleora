@@ -3,7 +3,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from sklearn.linear_model import SGDClassifier, LogisticRegression
-from src.utils.data import download_data, make_preprocessed_edges_file, split_data, load_data, run_cleora, save_report
+from src.utils.data import download_data, make_preprocessed_edges_file, split_data, load_data, run_cleora, save_report, add_on_features
 from src.utils.plots import visualize_pipeline, save_cm
 from src.pipelines.data import DataPipeline
 from src.pipelines.model import model_pipeline
@@ -33,11 +33,15 @@ def main():
     embeddings_pipeline.run()
 
     # prepare data for ML
-    data_pipeline = DataPipeline([
-        ("Download data", download_data),
-        ("Split data", split_data),
-        ("Load Data", load_data)
-    ])
+    steps = [
+    ("Download data", download_data),
+    ("Split data", split_data),
+    ("Load Data", load_data)
+    ]
+    if config['cleora_features_bool']:
+        steps.append(("Add node features", add_on_features))
+
+    data_pipeline = DataPipeline(steps)
     X_train, X_test, y_train, y_test = data_pipeline.run()
     visualize_pipeline(data_pipeline, type='html2')
     
