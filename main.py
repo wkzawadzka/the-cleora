@@ -11,12 +11,12 @@ from src.config import config
 def main():
 
     # prepare embeddings
-    embedings_pipeline = DataPipeline([
+    embeddings_pipeline = DataPipeline([
         ("Download data", download_data),
         ("Preprocess edges", make_preprocessed_edges_file),
         ("Run Cleora", run_cleora)
     ])
-    embedings_pipeline.run()
+    embeddings_pipeline.run()
 
     # prepare data for ML
     data_pipeline = DataPipeline([
