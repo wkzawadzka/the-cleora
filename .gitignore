@@ -17,3 +17,4 @@ diagrams/*
 experiment result/*
 *.csv
 *.png
+*.html
