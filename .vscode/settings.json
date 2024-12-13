@@ -1,0 +1,13 @@
+{
+    "workbench.colorTheme": "Peachy Themes",
+
+    "python.autoComplete.extraPaths": [
+        "./src"
+    ],
+    "python.analysis.extraPaths": [
+        "./src"
+    ],
+    "terminal.integrated.env.windows": { "PYTHONPATH": "${workspaceFolder}" },
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
+    "python.envFile": "${workspaceFolder}/.env"
+}
