@@ -14,3 +14,6 @@ __pycache__/
 data/*
 cleora/*
 diagrams/*
+experiment result/*
+*.csv
+*.png
