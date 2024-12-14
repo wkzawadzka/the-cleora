@@ -1,0 +1,48 @@
+\begin{frame}{Cleora: A Simple, Strong and Scalable Graph Embedding Scheme}
+
+\begin{block}{Overview}
+    Designed to be \textbf{fast} and \textbf{scalable}, open-source Cleora is ideal for processing massive datasets, such as social networks. It is conceptually simple yet powerful. Applications include:
+    \begin{itemize}
+        \item \textbf{Link Prediction:} Predicting if an edge exists.
+        \item \textbf{Node Classification:} Identifying the type or category of a node (our focus).
+    \end{itemize}
+\end{block}
+
+\vspace{0.5cm}
+
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/cleora.png}
+\end{center}
+
+\end{frame}
+% *************************************************
+\begin{frame}{How does it work?}
+
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \textbf{Key Steps:}
+        \begin{itemize}
+            \item \textbf{Iterative Weighted Averaging:} 
+            Each node's embedding is updated by averaging the embeddings of its neighbors.
+            \item \textbf{Normalization:}
+            After averaging, embeddings are normalized across dimensions to maintain consistency.
+        \end{itemize}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+        \textbf{Efficiency:}
+        \begin{itemize}
+            \item The \textbf{averaging operation} helps the algorithm move quickly through the embedding space.
+            \item Cleora usually reaches optimal embeddings in just a few iterations, making it fast and computationally efficient.
+        \end{itemize}
+        \textbf{Configurability:} \\
+        Only two parameters need to be set:
+        \begin{itemize}
+            \item \textbf{Number of iterations}
+            \item \textbf{Dimensionality of embeddings}
+        \end{itemize}
+        This simplicity makes it easy to find the optimal configuration.
+    \end{column}
+\end{columns}
+
+\end{frame}

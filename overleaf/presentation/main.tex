@@ -1,0 +1,46 @@
+\documentclass{clbeamer2024}
+\usepackage[utf8]{inputenc}
+\usepackage[OT4]{fontenc}
+\usepackage{standalone}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{booktabs}
+\usepackage{svg}
+\usepackage{subcaption}
+
+%--------------------------------------
+% Title slide
+%--------------------------------------
+\title{\\[2\baselineskip]KG Embeddings: exploring Cleora \cite{rychalska2021cleorasimplestrongscalable}: A Simple, Strong and Scalable Graph Embedding Scheme}
+\subtitle{Semantic Web and Social Networks Final Project}
+\author{
+    \begin{tabular}{c}
+        Team "The": \\[0.2cm]
+        Weronika Zawadzka \\ 
+        Eliza Czaplicka \\ 
+        Jerzy Pawlik \\ 
+        Filip Firkowski
+    \end{tabular}
+}
+% \institute{}
+\date{\today}
+
+\begin{document}
+\setcounter{framenumber}{-1}
+\frame{\titlepage}
+
+%--------------------------------------
+% Slides
+%--------------------------------------
+\section{Introduction}
+\include{introduction/cleora}
+\include{introduction/dataset}
+\include{results/experiments}
+
+%--------------------------------------
+% Literatura
+%--------------------------------------
+\begin{frame}{Bibliography}
+\bibliographystyle{plain}{\raggedright\sloppy\small\bibliography{bibliografia}}
+\end{frame}
+
+\end{document}
